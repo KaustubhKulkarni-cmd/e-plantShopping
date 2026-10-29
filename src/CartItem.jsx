@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -11,42 +10,54 @@ import {
 
 export default function CartItem() {
   const dispatch = useDispatch();
+
   const items = useSelector((state) => state.cart.items);
 
-  const total = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  const totalItems = items.reduce(
+    (sum, item) => sum + item.quantity,
     0
   );
 
-  const itemCount = items.reduce(
-    (sum, item) => sum + item.quantity,
+  const totalCost = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
   return (
     <main className="cart-page">
-      <h1>Shopping Cart</h1>
-      <p>Total items: {itemCount}</p>
+      <header className="page-heading">
+        <h1>Shopping Cart</h1>
+        <p>{totalItems} plant(s) in your cart</p>
+      </header>
 
       {items.length === 0 ? (
-        <>
-          <p>Your cart is empty.</p>
+        <section className="empty-cart">
+          <h2>Your cart is empty</h2>
+          <p>Discover plants and bring some greenery home.</p>
           <Link to="/plants">
             <button>Continue Shopping</button>
           </Link>
-        </>
+        </section>
       ) : (
         <>
           {items.map((item) => (
             <article className="cart-item" key={item.id}>
               <img
-                src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=300&q=80`}
+                src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=400&q=80`}
                 alt={item.name}
               />
 
-              <div>
-                <h3>{item.name}</h3>
-                <p>Unit price: ${item.price.toFixed(2)}</p>
+              <div className="cart-item-details">
+                <h2>{item.name}</h2>
+
+                <p>
+                  Unit price: ${item.price.toFixed(2)}
+                </p>
+
+                <p>
+                  Quantity: {item.quantity}
+                </p>
+
                 <p>
                   Item total: $
                   {(item.price * item.quantity).toFixed(2)}
@@ -54,17 +65,21 @@ export default function CartItem() {
 
                 <div className="cart-actions">
                   <button
+                    aria-label={`Decrease ${item.name} quantity`}
+                    disabled={item.quantity <= 1}
                     onClick={() =>
                       dispatch(decreaseQuantity(item.id))
                     }
-                    disabled={item.quantity <= 1}
                   >
-                    -
+                    −
                   </button>
 
-                  <span>{item.quantity}</span>
+                  <span className="quantity">
+                    {item.quantity}
+                  </span>
 
                   <button
+                    aria-label={`Increase ${item.name} quantity`}
                     onClick={() =>
                       dispatch(increaseQuantity(item.id))
                     }
@@ -73,6 +88,7 @@ export default function CartItem() {
                   </button>
 
                   <button
+                    className="delete-button"
                     onClick={() =>
                       dispatch(removeFromCart(item.id))
                     }
@@ -84,19 +100,23 @@ export default function CartItem() {
             </article>
           ))}
 
-          <h2>Grand Total: ${total.toFixed(2)}</h2>
+          <section className="cart-summary">
+            <h2>
+              Total Cost: ${totalCost.toFixed(2)}
+            </h2>
 
-          <div className="cart-actions">
-            <button
-              onClick={() => window.alert("Coming Soon!")}
-            >
-              Checkout
-            </button>
+            <div className="cart-actions">
+              <Link to="/plants">
+                <button>Continue Shopping</button>
+              </Link>
 
-            <Link to="/plants">
-              <button>Continue Shopping</button>
-            </Link>
-          </div>
+              <button
+                onClick={() => window.alert("Coming Soon!")}
+              >
+                Checkout
+              </button>
+            </div>
+          </section>
         </>
       )}
     </main>
