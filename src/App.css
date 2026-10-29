@@ -63,3 +63,37 @@
   border-radius: 12px;
   margin-bottom: 18px;
 }
+
+.get-started-button {
+  background-color: #247346;
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.get-started-button:hover {
+  background-color: #185634;
+}
+
+.cart-item-delete {
+  background-color: #b93838;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cart-item-delete:hover {
+  background-color: #902626;
+}
+
+.card-container {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 12px #0000000d;
+}
